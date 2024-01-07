@@ -1,0 +1,82 @@
+:root {
+    --button-hover-color: rgb(65, 66, 67);
+    --operation-color: rgb(104, 132, 167);
+    --operation-hover-color: rgb(75, 96, 122);
+    --equal-color: rgb(237, 92, 107);
+    --equal-hover-color: rgb(203, 74, 87);
+}
+
+body,
+html {
+    height: 100%;
+    margin: 0;
+    background-color: lightgray;
+    text-align: center;
+}
+
+.calculator {
+    width: 320px;
+    height: 500px;
+    margin: 0 auto;
+    background-color: rgb(66, 76, 82);
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+.display {
+    color: white;
+    padding: 35px 10px 35px 0;
+    display: flex;
+    justify-content: flex-end;
+    font-size: 3rem;
+    font-family: 'Orbitron', sans-serif;
+    border-radius: 15px 15px 0 0;
+}
+
+.buttons {
+    height: 75%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    justify-items: center;
+}
+
+button {
+    border: none;
+    outline: none;
+    font-size: 1.2rem;
+    background: none;
+    color: white;
+    height: 65px;
+    width: 65px;
+    align-self: center;
+    border-radius: 50%;
+}
+
+button:hover {
+    cursor: pointer;
+    background-color: var(--button-hover-color);
+}
+
+button.operation {
+    background-color: var(--operation-color);
+}
+
+button.operation:hover {
+    background-color: var(--operation-hover-color);
+}
+
+button.zero {
+    border-radius: 0 0 0 15px;
+}
+
+button.equals {
+    grid-column: 4 / 5;
+    grid-row: 2 / span 4;
+    height: 92%;
+    border-radius: 50px;
+    background-color: var(--equal-color);
+}
+
+button.equals:hover {
+    background-color: var(--equal-hover-color);
+}
