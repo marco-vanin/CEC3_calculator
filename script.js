@@ -3,6 +3,9 @@ const rootStyle = getComputedStyle(document.documentElement);
 const operationBtnColor = rootStyle.getPropertyValue('--operation-color').trim();
 const operationButtons = document.querySelectorAll('.operation');
 const numberButtons = document.querySelectorAll('.number');
+const body = document.querySelector('body');
+const operators = ['+', '-', '*', '/'];
+const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
 
 /* Selectors */
@@ -51,6 +54,7 @@ const handleNumberButtonClick = (numberButton) => {
 
     if (operationData.justClickedEquals) {
         operationData.firstParam = null;
+        operationData.justClickedEquals = false;
     }
 
     const param = (operationData.operator === null ? 'firstParam' : 'secondParam');
@@ -123,13 +127,72 @@ const handleEqualsButtonClick = () => {
 
     if (operationData.firstParam !== null && operationData.secondParam !== null) {
         const result = operate(operationData.operator, operationData.firstParam, operationData.secondParam);
-        operationData.firstParam = parseFloat(result.toFixed(7));
+        operationData.firstParam = operationData.firstParam == 0 ? 0 : parseFloat(result.toFixed(7)).toString();
         operationData.secondParam = null;
         operationData.operator = null;
         updateDisplay(operationData.firstParam);
     }
 };
 
+const handleKeyPress = (e) => {
+    const key = e.key;
+
+    switch (key) {
+        case '.':
+            handleDecimalButtonClick();
+            break;
+        case 'Enter':
+            handleEqualsButtonClick();
+            break;
+        case 'Escape':
+            handleClearButtonClick();
+            break;
+        case 'Backspace':
+            handleBackspace();
+            break;
+        case 'Delete':
+            handleClearButtonClick();
+            break;
+        default:
+            if (operators.includes(key) || numbers.includes(key)) {
+                const element = document.getElementById(`${key}`);
+
+                if (operators.includes(key)) handleOperationButtonClick(element);
+                else {
+                    handleNumberButtonClick(element);
+
+                    console.log(element)
+
+                    // TODO : Add hover effect on keypress
+                    // // Add a class for hover effect
+                    // element.classList.add('hover-effect');
+
+                    // // Remove the class after a short delay
+                    // setTimeout(() => {
+                    //     element.classList.remove('hover-effect');
+                    // }, 300);
+                }
+            }
+            break;
+    }
+};
+
+const handleBackspace = () => {
+    const { firstParam, secondParam, operator } = operationData;
+
+    if (secondParam !== null) {
+        operationData.secondParam = secondParam.length === 1 ? '0' : secondParam.slice(0, -1);
+        updateDisplay(operationData.secondParam);
+    } else if (operator !== null) {
+        operationData.operator = null;
+        toggleStyleOperationButton(null);
+    } else if (firstParam !== null) {
+        operationData.firstParam = firstParam.length === 1 ? '0' : firstParam.slice(0, -1);
+        updateDisplay(operationData.firstParam);
+    } else {
+        updateDisplay('0');
+    }
+};
 
 /* Event Listeners */
 numberButtons.forEach((numberButton) => {
@@ -145,3 +208,5 @@ operationButtons.forEach((operationButton) => {
 clearBtn.addEventListener('click', handleClearButtonClick);
 
 equalsBtn.addEventListener('click', handleEqualsButtonClick);
+
+body.addEventListener('keydown', handleKeyPress);
